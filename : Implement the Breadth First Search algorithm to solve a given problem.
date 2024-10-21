@@ -1,3 +1,6 @@
+Implement Breadth First Search Algorithm
+
+A. Code: Implement the Breadth First Search algorithm to solve a given problem.
 import queue as Q
 from RMP import dict_gn
 
@@ -92,5 +95,59 @@ dict_hn = {
     'Hirsova': 151,
     'Eforie': 161
 }
+
+
+
+B. Code: Implement the Iterative Depth First Search algorithm to solve the same problem. 
+
+
+
+from RMP import dict_gn
+
+start = "Arad"
+goal = "Bucharest"
+result = ""
+
+def DLS(city, visited_stack, start_limit, end_limit):
+    global result
+    result += city + " "
+    visited_stack.append(city)
+
+    if city == goal:
+        return True  # Found the goal
+
+    if start_limit == end_limit:
+        visited_stack.pop()  # Backtrack
+        return False  # Reached the depth limit
+
+    for each_city in dict_gn[city].keys():
+        if each_city not in visited_stack:
+            found = DLS(each_city, visited_stack, start_limit + 1, end_limit)
+            if found:
+                return True  # Goal found
+    
+    visited_stack.pop()  # Backtrack
+    return False  # Goal not found in this path
+
+def IDDFS(city, end_limit):
+    global result
+    for limit in range(end_limit):
+        print(f"Searching at Limit: {limit}")
+        visited_stack = []  # Reset for each depth limit
+        found = DLS(city, visited_stack, 0, limit)
+        
+        if found:
+            print("Found")
+            break
+        else:
+            print("Not Found!")
+            result = ""  # Reset result for the next iteration
+
+def main():
+    IDDFS(start, 9)  # Adjust the depth limit as needed
+    print("IDDFS Traversal from", start, "to", goal, "is:")
+    print(result.strip())  # Strip trailing space for cleaner output
+
+main()
 
 
