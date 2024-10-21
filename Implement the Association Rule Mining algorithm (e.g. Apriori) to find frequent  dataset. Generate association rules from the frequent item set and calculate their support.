@@ -1,0 +1,41 @@
+ Implement the Association Rule Mining algorithm (e.g. Apriori) to find frequent 
+dataset. Generate association rules from the frequent item set and calculate their support.
+
+pip install pandas mlxtend
+
+# Importing necessary libraries
+import pandas as pd
+from mlxtend.frequent_patterns import apriori, association_rules
+
+# Sample dataset: transactions represented as a list of lists
+transactions = [
+    ['milk', 'bread', 'butter'],
+    ['bread', 'diaper', 'beer', 'milk'],
+    ['milk', 'bread', 'diaper', 'cola'],
+    ['milk', 'bread', 'butter'],
+    ['bread', 'milk', 'diaper', 'beer'],
+    ['bread', 'butter', 'beer'],
+    ['milk', 'diaper', 'beer'],
+]
+
+# Converting transactions into a one-hot encoded DataFrame
+from mlxtend.preprocessing import TransactionEncoder
+
+encoder = TransactionEncoder()
+onehot = encoder.fit(transactions).transform(transactions)
+df = pd.DataFrame(onehot, columns=encoder.columns_)
+
+# Step 1: Find frequent itemsets using the Apriori algorithm
+min_support = 0.3  # Minimum support threshold
+frequent_itemsets = apriori(df, min_support=min_support, use_colnames=True)
+
+# Display the frequent itemsets
+print("Frequent Itemsets:")
+print(frequent_itemsets)
+
+# Step 2: Generate association rules from the frequent itemsets
+rules = association_rules(frequent_itemsets, metric="support", min_threshold=0.3)
+
+# Display the generated association rules
+print("\nAssociation Rules:")
+print(rules)
